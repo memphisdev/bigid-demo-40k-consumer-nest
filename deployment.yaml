@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memphis-40k-consumer
+  namespace: memphis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: memphis-40k-consumer
+  template:
+    metadata:
+      name: memphis-40k-consumer
+      labels:
+        app: memphis-40k-consumer
+    spec:
+      containers:
+        - name: memphis-40k-consumer
+          image: memphisos/memphis-40k-consumer:latest
+          ports:
+            - containerPort: 3232
+              protocol: TCP
+          env:
+            - name: MEMPHIS_USERNAME
+              value: root
+            - name: MEMPHIS_HOST
+              value: memphis.memphis.svc.cluster.local
+            - name: PASS
+              valueFrom:
+                secretKeyRef:
+                  name: memphis-creds
+                  key: ROOT_PASSWORD
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+
