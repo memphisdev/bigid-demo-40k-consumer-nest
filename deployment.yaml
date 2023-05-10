@@ -4,7 +4,7 @@ metadata:
   name: memphis-40k-consumer
   namespace: memphis
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: memphis-40k-consumer

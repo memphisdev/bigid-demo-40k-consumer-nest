@@ -4,15 +4,10 @@ async function startConsumer() {
   let memphisConnection: Memphis;
   let counter = 0;
   try {
-    // memphisConnection = await memphis.connect({
-    //   host: process.env.MEMPHIS_HOST,
-    //   username: process.env.MEMPHIS_USERNAME,
-    //   password: process.env.PASS,
-    // });
     memphisConnection = await memphis.connect({
-      host: 'localhost',
-      username: 'root',
-      password: 'memphis',
+      host: process.env.MEMPHIS_HOST,
+      username: process.env.MEMPHIS_USERNAME,
+      password: process.env.PASS,
     });
     const consumer = await memphisConnection.consumer({
       stationName: 'demo-40k',
