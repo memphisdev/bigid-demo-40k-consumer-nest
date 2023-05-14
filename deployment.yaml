@@ -24,12 +24,12 @@ spec:
             - name: MEMPHIS_USERNAME
               value: root
             - name: MEMPHIS_HOST
-              value: memphis.memphis.svc.cluster.local
+              value: memphis-cluser.memphis-qa-1.svc.cluster.local
             - name: PASS
               valueFrom:
                 secretKeyRef:
                   name: memphis-creds
-                  key: ROOT_PASSWORD
+                  key: CONNECTION_TOKEN
           imagePullPolicy: Always
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
