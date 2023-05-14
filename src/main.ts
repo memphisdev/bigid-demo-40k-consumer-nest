@@ -11,17 +11,18 @@ async function startConsumer() {
     });
     const consumer = await memphisConnection.consumer({
       stationName: 'demo-40k',
-      consumerName: 'consumer',
-      consumerGroup: 'cg40k',
+      consumerName: `consumer.${process.pid}`,
+      consumerGroup: 'catalog.cg40k',
       genUniqueSuffix: true,
       maxAckTimeMs: 60000,
       maxMsgDeliveries: 1,
     });
-    consumer.on('message', (message: Message) => {
+    consumer.on('message', async (message: Message) => {
+      await sleep(3000);
+      message.ack();
       counter++;
       console.log('counter: ' + counter);
       // console.log(message.getData().toString());
-      message.ack();
     });
 
     consumer.on('error', (error) => {
@@ -33,3 +34,7 @@ async function startConsumer() {
   }
 }
 startConsumer();
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
