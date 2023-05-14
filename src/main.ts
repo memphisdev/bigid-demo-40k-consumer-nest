@@ -7,21 +7,21 @@ async function startConsumer() {
     memphisConnection = await memphis.connect({
       host: process.env.MEMPHIS_HOST,
       username: process.env.MEMPHIS_USERNAME,
-      password: process.env.PASS,
+      connectionToken: process.env.PASS,
     });
     const consumer = await memphisConnection.consumer({
       stationName: 'demo-40k',
       consumerName: 'consumer',
       consumerGroup: 'cg40k',
       genUniqueSuffix: true,
+      maxAckTimeMs: 60000,
+      maxMsgDeliveries: 1,
     });
-    consumer.setContext({ key: 'value' });
-    consumer.on('message', (message: Message, context: object) => {
+    consumer.on('message', (message: Message) => {
       counter++;
       console.log('counter: ' + counter);
       // console.log(message.getData().toString());
       message.ack();
-      const headers = message.getHeaders();
     });
 
     consumer.on('error', (error) => {
